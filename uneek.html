@@ -1,24 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-    <img src="./images/dn-blue-white.png" alt="dn" class="images">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSV Manipulation App</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <link rel="stylesheet" href="index.css">
+    <title>Parse Excel</title>
+    <link rel="stylesheet" href="index.css"> <!-- Linking external CSS file -->
 </head>
 <body>
-    <!-- File input for selecting CSV file -->
-    <input type="file" id="csv-file" accept=".csv">
-    <br>
-    <!-- Button to trigger CSV parsing -->
-    <button id="parse-button">Parse CSV</button>
-    <br>
-    <!-- Button to trigger CSV download -->
-    <button id="download-button" disabled>Download Manipulated CSV</button>
-    <div id="output"></div>
 
-    <script src="app.js"></script>
+<h1>Excel Data Parser</h1>
+
+<div class="center">
+    <input type="file" id="excel-file" />
+    <button id="download-btn" style="display:none;">Download CSV</button> <!-- Download Button -->
+</div>
+
+<div id="output"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+// Global variable to hold the parsed data
+let parsedData = [];
+
+document.getElementById('excel-file').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        parseExcel(file);
+    }
+});
+
+// Function to parse the uploaded Excel file
+function parseExcel(file) {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        
+        // Convert sheet to JSON
+        parsedData = XLSX.utils.sheet_to_json(firstSheet);
+
+        // Rename the columns and add fixed values
+        parsedData = parsedData.map(row => {
+            return {
+                ProductName: row['Description'], // Rename Description -> ProductName
+                ProductDescription: '',
+                Supplier: 'Uneek',  // Fixed value for Supplier
+                Brand: row[''],
+                DNProductType: row[''],
+                VendorProductCode: row['ProductCode'], // Rename Stockcode -> VendorProductCode
+                VendorSkuCode: row[''],
+                Groupname: row['Groupname'],
+                ColorName: row['ColourDesc'], // Rename Colourname -> ColorName
+                SizeCode: row['SizeCode'],
+                SizeName: row['SizeDesc'],
+                ShippingWeight: row['Weight'],
+                Weightgsm: row['Weightgsm'],
+                Picture_url: row['Picture_url'],
+                VendorCost: row['Price']  // Rename Price -> VendorCost
+            };
+        });
+
+        // Display the result in a table
+        displayResult(parsedData);
+
+        // Show download button after parsing data
+        document.getElementById('download-btn').style.display = 'inline-block';
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+// Function to display the parsed and updated data
+function displayResult(data) {
+    const outputDiv = document.getElementById('output');
+    outputDiv.innerHTML = ''; // Clear previous content
+
+    // Create a table
+    const table = document.createElement('table');
+
+    // Create table header
+    const headers = Object.keys(data[0]);
+    const headerRow = document.createElement('tr');
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+
+    // Create table rows with cell values
+    data.forEach(row => {
+        const tr = document.createElement('tr');
+        headers.forEach(header => {
+            const td = document.createElement('td');
+            td.textContent = row[header];
+            tr.appendChild(td);
+        });
+        table.appendChild(tr);
+    });
+
+    outputDiv.appendChild(table);
+}
+
+// Function to download the parsed data as a CSV file
+document.getElementById('download-btn').addEventListener('click', function() {
+    const csvContent = convertToCSV(parsedData);
+    downloadCSV(csvContent);
+});
+
+// Function to convert JSON data to CSV format
+function convertToCSV(data) {
+    const headers = Object.keys(data[0]);
+    const csvRows = [];
+
+    // Add header row
+    csvRows.push(headers.join(','));
+
+    // Add data rows
+    data.forEach(row => {
+        const values = headers.map(header => `"${row[header] || ''}"`);
+        csvRows.push(values.join(','));
+    });
+
+    return csvRows.join('\n');
+}
+
+// Function to create and download the CSV file
+function downloadCSV(csvContent) {
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'parsed_data.csv');
+    a.click();
+}
+
+</script>
+
 </body>
 </html>
