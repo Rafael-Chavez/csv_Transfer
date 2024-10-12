@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parse Excel</title>
+    <link rel="stylesheet" href="index.css"> <!-- Linking external CSS file -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,15 +21,31 @@
             padding: 10px;
             text-align: left;
         }
+        #download-btn {
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none; /* Initially hidden */
+        }
+        #download-btn:hover {
+            background-color: #45a049; /* Darker green */
+        }
     </style>
 </head>
 <body>
 
 <input type="file" id="excel-file" />
+<button id="download-btn">Download CSV</button> <!-- Download Button -->
 <div id="output"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+let parsedData = []; // Global variable to hold the parsed data
+
 document.getElementById('excel-file').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -46,28 +63,29 @@ function parseExcel(file) {
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
         
         // Convert sheet to JSON
-        let rows = XLSX.utils.sheet_to_json(firstSheet);
+        parsedData = XLSX.utils.sheet_to_json(firstSheet);
 
         // Rename the columns and add fixed values
-        rows = rows.map(row => {
+        parsedData = parsedData.map(row => {
             return {
                 ProductName: row['Description'], // Rename Description -> ProductName
                 ProductDescription: '',
-                Supplier: 'AS Colour (AUS)',  // Fixed value for Supplier
-                VendorProductCode: row['Stockcode'], // Rename Stockcode -> VendorProductCode
-                Groupname: row['Groupname'],
+                Brand: 'AS Colour (AUS)',  // Fixed value for Supplier
+                VendorSkuCode: row['Stockcode'], // Rename Stockcode -> VendorProductCode
+                VendorProductCode: row['Groupname'],
                 ColorName: row['Colourname'], // Rename Colourname -> ColorName
                 SizeCode: row['Sizename'],
                 SizeName: row['Sizename'],
-                Weightkg: row['Weightkg'],
-                Weightgsm: row['Weightgsm'],
-                Picture_url: row['Picture_url'],
-                VendorCost: row['Price']  // Rename Price -> VendorCost
+                LifestyleImage: row['Picture_url'],
+                PiecePrice: row['Price']  // Rename Price -> VendorCost
             };
         });
 
         // Display the result in a table
-        displayResult(rows);
+        displayResult(parsedData);
+        
+        // Show the download button after parsing data
+        document.getElementById('download-btn').style.display = 'inline-block';
     };
 
     reader.readAsArrayBuffer(file);
@@ -104,6 +122,34 @@ function displayResult(data) {
 
     outputDiv.appendChild(table);
 }
+
+// Function to convert JSON data to CSV format
+function convertToCSV(data) {
+    const headers = Object.keys(data[0]);
+    const csvRows = [];
+
+    // Add header row
+    csvRows.push(headers.join(','));
+
+    // Add data rows
+    data.forEach(row => {
+        const values = headers.map(header => `"${row[header] || ''}"`);
+        csvRows.push(values.join(','));
+    });
+
+    return csvRows.join('\n');
+}
+
+// Function to download the parsed data as a CSV file
+document.getElementById('download-btn').addEventListener('click', function() {
+    const csvContent = convertToCSV(parsedData);
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'parsed_data.csv');
+    a.click();
+});
 </script>
 
 </body>

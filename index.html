@@ -1,50 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <href> <img src="images/dn-blue-white.png" alt=""></href>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            text-align: center;
-        }
-
-        .button {
-            display: inline-block;
-            margin: 20px;
-            padding: 15px 30px;
-            font-size: 18px;
-            color: #fff;
-            background-color: #333;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #555;
-        }
-    </style>
+    <!-- Tailwind CSS via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
 
-    <div class="container">
-        <a href="asco.html" class="button">ASCOLOUR</a>
-        <a href="uneek.html" class="button">UNEEK</a>
+<body class="flex items-center justify-center h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+
+    <div class="text-center">
+        <header class="mb-8">
+            <h1 class="text-4xl font-semibold text-white">Welcome to Your Supplier Portal</h1>
+        </header>
+        <h2 class="text-3xl font-light mb-8 text-gray-200">Choose Your Supplier</h2>
+        <div class="space-x-4">
+            <a href="asco.html"
+                class="inline-block bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition ease-in-out">
+                ASCOLOUR
+            </a>
+            <a href="uneek.html"
+                class="inline-block bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition ease-in-out">
+                UNEEK
+            </a>
+        </div>
     </div>
 
 </body>
+
 </html>

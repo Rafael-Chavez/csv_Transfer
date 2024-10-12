@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <href> <img src="images/dn-blue-white.png" alt=""></href>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parse Excel</title>
@@ -44,13 +45,11 @@ function parseExcel(file) {
         // Rename the columns and add fixed values
         parsedData = parsedData.map(row => {
             return {
-                ProductName: row['Description'], // Rename Description -> ProductName
-                ProductDescription: '',
-                Supplier: 'Uneek',  // Fixed value for Supplier
-                Brand: row[''],
-                DNProductType: row[''],
+                ProductName: row['Description'] ? extractProductName(row['Description']) : '', // Extract relevant part                ProductDescription: '',
+                Brand: ['Uneek'],
+                DNProductType: ['Apparel'],
                 VendorProductCode: row['ProductCode'], // Rename Stockcode -> VendorProductCode
-                VendorSkuCode: row[''],
+                VendorSkuCode: row['ItemNo'],
                 Groupname: row['Groupname'],
                 ColorName: row['ColourDesc'], // Rename Colourname -> ColorName
                 SizeCode: row['SizeCode'],
@@ -71,7 +70,11 @@ function parseExcel(file) {
 
     reader.readAsArrayBuffer(file);
 }
-
+// Function to extract the relevant product name
+function extractProductName(description) {
+    const parts = description.split(' - '); // Split the string by ' - '
+    return parts.pop(); // Return the last element
+}
 // Function to display the parsed and updated data
 function displayResult(data) {
     const outputDiv = document.getElementById('output');
