@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-    <href> <img src="images/dn-blue-white.png" alt=""></href>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
@@ -10,30 +9,41 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body class="flex items-center justify-center h-screen bg-gradient-to-r from-blue-500 to-purple-600">
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 p-4">
 
-    <div class="text-center">
+    <div class="text-center w-full max-w-5xl mx-auto">
         <header class="mb-8">
+            <img src="images/dn-blue-white.png" alt="DecoNetwork" class="mx-auto mb-6 h-16">
             <h1 class="text-4xl font-semibold text-white">Welcome to Your Supplier Portal</h1>
         </header>
-        <h2 class="text-3xl font-light mb-8 text-gray-200">Choose Your Supplier</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <a href="asco.html"
-                class="block bg-gray-800 text-white px-8 py-6 rounded-lg hover:bg-gray-700 transition ease-in-out text-center text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
-                ASCOLOUR
-            </a>
-            <a href="uneek.html"
-                class="block bg-gray-800 text-white px-8 py-6 rounded-lg hover:bg-gray-700 transition ease-in-out text-center text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
-                UNEEK
-            </a>
-            <a href="carolinamade.html"
-                class="block bg-gray-800 text-white px-8 py-6 rounded-lg hover:bg-gray-700 transition ease-in-out text-center text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
-                CAROLINA MADE
-            </a>
-            <a href="txttocsv.html"
-                class="block bg-gray-800 text-white px-8 py-6 rounded-lg hover:bg-gray-700 transition ease-in-out text-center text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
-                TXT TO CSV
-            </a>
+        <!-- Suppliers Section -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-light mb-8 text-gray-200">Choose Your Supplier</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                <a href="asco.html"
+                    class="block bg-gray-800 text-white px-8 py-6 rounded-lg hover:bg-gray-700 transition ease-in-out text-center text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
+                    ASCOLOUR
+                </a>
+                <a href="uneek.html"
+                    class="block bg-gray-800 text-white px-8 py-6 rounded-lg hover:bg-gray-700 transition ease-in-out text-center text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
+                    UNEEK
+                </a>
+                <a href="carolinamade.html"
+                    class="block bg-gray-800 text-white px-8 py-6 rounded-lg hover:bg-gray-700 transition ease-in-out text-center text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
+                    CAROLINA MADE
+                </a>
+            </div>
+        </div>
+
+        <!-- Tools Section -->
+        <div>
+            <h2 class="text-2xl font-light mb-6 text-gray-300">File Conversion Tools</h2>
+            <div class="max-w-md mx-auto">
+                <a href="txttocsv.html"
+                    class="block bg-indigo-700 text-white px-8 py-6 rounded-lg hover:bg-indigo-600 transition ease-in-out text-center text-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105">
+                    TXT TO CSV
+                </a>
+            </div>
         </div>
     </div>
 
