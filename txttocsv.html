@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TXT to CSV Converter</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <h1>TXT TO CSV CONVERTER</h1>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link active">
+                        <span class="icon-circle"><i class="fas fa-home"></i></span>
+                        Home
+                    </a>
+                    <a href="mailto:rchavez@deconetwork.com" class="nav-link">
+                        <span class="icon-circle"><i class="fas fa-envelope"></i></span>
+                        Contact
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="file-upload">
+                <label for="txt-file" class="file-upload-label">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Click to select or drop TXT file here</span>
+                </label>
+                <input type="file" id="txt-file" accept=".txt" />
+                <div id="file-name" class="file-name"></div>
+
+                <div style="margin: 20px 0;">
+                    <label for="delimiter" style="color: #333; font-weight: 500;">Delimiter:</label>
+                    <select id="delimiter" style="margin-left: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                        <option value="tab">Tab</option>
+                        <option value="comma">Comma</option>
+                        <option value="pipe">Pipe (|)</option>
+                        <option value="semicolon">Semicolon</option>
+                        <option value="space">Space</option>
+                    </select>
+                </div>
+
+                <button id="download-btn" class="btn" style="display:none;">Download CSV</button>
+            </section>
+
+            <section class="data-table-container">
+                <div id="output" class="data-table">
+                    <div class="empty-state">
+                        <i class="fas fa-table"></i>
+                        <h3>No data to display</h3>
+                        <p>Upload a TXT file to see the data here</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="Scripts/txttocsv.js"></script>
+</body>
+</html>
