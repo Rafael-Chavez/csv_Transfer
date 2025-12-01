@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 SizeCode: row['Size Code'] || '',
                 SizeName: row['Size Code'] || '',
                 PiecePrice: row['Regular Piece Price'] || '',
-                DuzenPrice: row['Regular Dozen Price'] || '',
+                DozenPrice: row['Regular Dozen Price'] || '',
                 CasePrice: row['Regular Case Price'] || '',
                 CasePriceQTY: row['Pieces per Case'] || ''
             };
