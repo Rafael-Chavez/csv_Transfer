@@ -237,37 +237,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // Transform to DecoNetwork format (similar to Uneek)
         parsedData = rawData.map(row => {
             return {
-                ProductName: row['Style'] || '',
-                ProductDescription: row['Style Description'] || '',
-                Brand: 'Carolina Made',
+                ProductName: row['Style Description'] || '',
+                ProductDescription: '',
+                BrandName: row['Brand'] || '',
                 VendorProductCode: row['Style'] || '',
                 VendorSkuCode: row['Item Number'] || '',
-                ColorName: row['Color Category'] || row['Color Description'] || row['Web Color Description'] || '',
+                ColorName: row['Color Description'] || '',
                 SizeCode: row['Size Code'] || '',
                 SizeName: row['Size Code'] || '',
-                ShippingWeight: row['Piece Weight'] || '',
-                Weightgsm: row['Piece Weight'] || '',
-                PieceWeight: row['Piece Weight'] || '',
                 PiecePrice: row['Regular Piece Price'] || '',
                 DuzenPrice: row['Regular Dozen Price'] || '',
                 CasePrice: row['Regular Case Price'] || '',
-                VendorCost: row['Regular Piece Price'] || '',
-                InventoryPieces: row['Inventory Pieces'] || '',
-                Mill: row['Mill'] || 'Carolina Made',
-                Manufacturer: row['Manufacturer'] || 'Carolina Made',
-                PiecesPerCase: row['Pieces per Case'] || '',
-                CaseWeight: row['Case Wt.'] || '',
-                Currency: row['Currency'] || 'USD',
-                ColorDescription: row['Color Description'] || '',
-                Closeout: row['Closeout'] || '',
-                ShippingWarehouse: row['Shipping Warehouse'] || '',
-                PieceCube: row['Piece Cube/Inches'] || '',
-                SalePiecePrice: row['Customer Sale Piece Price'] || '',
-                SaleDozenPrice: row['Customer Sale Dozen Price'] || '',
-                SaleCasePrice: row['Customer Sale Case Price'] || '',
-                SaleEndDate: row['Sale End Date'] || '',
-                GTIN: row['GTIN#'] || '',
-                MillDiscontinued: row['Mill Discontinued'] || ''
+                CasePriceQTY: row['Pieces per Case'] || ''
             };
         });
 
@@ -403,9 +384,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add data rows
         data.forEach(row => {
             const values = headers.map(header => {
-                // Escape quotes and ensure proper CSV formatting
+                // Get value without adding quotes
                 const value = row[header] === null || row[header] === undefined ? '' : String(row[header]);
-                return `"${value.replace(/"/g, '""')}"`;
+                // Only escape commas by wrapping in quotes if value contains comma
+                if (value.includes(',')) {
+                    return `"${value.replace(/"/g, '""')}"`;
+                }
+                return value;
             });
             csvRows.push(values.join(','));
         });
