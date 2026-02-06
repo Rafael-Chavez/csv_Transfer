@@ -106,10 +106,66 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Parse the data
                 parsedData = [];
-                const headers = lines[0].split(delimiter).map(h => h.trim());
+
+                // Check if first line is a header by checking if first value looks like a header
+                const firstLine = lines[0].split(delimiter).map(h => h.trim());
+                const hasHeader = firstLine[0] && (
+                    firstLine[0].toLowerCase().includes('item') ||
+                    firstLine[0].toLowerCase().includes('sku') ||
+                    firstLine[0].toLowerCase().includes('number') ||
+                    firstLine.some(h => h.toLowerCase().includes('description'))
+                );
+
+                // Carolina Made standard headers (31 columns based on actual file structure)
+                const carolinaMadeHeaders = [
+                    'Item Number',                    // 1
+                    'Style',                          // 2
+                    'Mill',                           // 3
+                    'Color Code',                     // 4
+                    'Size Code',                      // 5
+                    'Pieces per Case',                // 6
+                    'Manufacturer',                   // 7
+                    'BLANK1',                         // 8 - blank column
+                    'Case Wt.',                       // 9
+                    'BLANK2',                         // 10 - blank column
+                    'Regular Piece Price',            // 11
+                    'Regular Dozen Price',            // 12
+                    'Regular Case Price',             // 13
+                    'Currency',                       // 14
+                    'Retail A Pricing',               // 15
+                    'Color Category',                 // 16
+                    'Color Description',              // 17
+                    'Closeout',                       // 18
+                    'Style Description',              // 19
+                    'Shipping Warehouse',             // 20
+                    'Piece Cube/Inches',              // 21
+                    'Piece Weight',                   // 22
+                    'Inventory Pieces',               // 23
+                    'Customer Sale Piece Price',      // 24
+                    'Customer Sale Dozen Price',      // 25
+                    'Customer Sale Case Price',       // 26
+                    'Sale End Date',                  // 27
+                    'GTIN#',                          // 28
+                    'Mill Discontinued',              // 29
+                    'Web Color Description',          // 30
+                    'Brand'                           // 31
+                ];
+
+                let headers;
+                let startLine;
+
+                if (hasHeader) {
+                    // Use headers from file
+                    headers = firstLine;
+                    startLine = 1;
+                } else {
+                    // No header in file, use standard Carolina Made headers
+                    headers = carolinaMadeHeaders;
+                    startLine = 0;
+                }
 
                 // Convert to array of objects
-                for (let i = 1; i < lines.length; i++) {
+                for (let i = startLine; i < lines.length; i++) {
                     const values = lines[i].split(delimiter);
                     const row = {};
                     headers.forEach((header, index) => {

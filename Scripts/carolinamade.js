@@ -96,41 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Standard header order for Carolina Made supplier files
-    const standardHeaders = [
-        'Item Number',
-        'Style',
-        'Mill',
-        'Color Code',
-        'Size Code',
-        'Pieces per Case',
-        'Manufacturer',
-        '',
-        'Case Wt.',
-        ' ',
-        'Regular Piece Price',
-        'Regular Dozen Price',
-        'Regular Case Price',
-        'Currency',
-        'Retail A Pricing',
-        'Color Category',
-        'Color Description',
-        'Closeout',
-        'Style Description',
-        'Shipping Warehouse',
-        'Piece Cube/Inches',
-        'Piece Weight',
-        'Inventory Pieces',
-        'Customer Sale Piece Price',
-        'Customer Sale Dozen Price',
-        'Customer Sale Case Price',
-        'Sale End Date',
-        'GTIN#',
-        'Mill Discontinued',
-        'Web Color Description',
-        'Brand'
-    ];
-
     // Function to parse the uploaded file (raw data)
     function parseFile(file) {
         // Show loading indicator
@@ -155,60 +120,75 @@ document.addEventListener('DOMContentLoaded', function() {
                     return;
                 }
 
-                // Parse raw data and map to standard headers
+                // Parse raw data dynamically from headers
                 rawData = [];
 
-                // Skip first line if it's a header, or process all lines as data
-                const startLine = 0; // Treat all lines as data
+                // Parse CSV properly handling quoted values
+                function parseCSVLine(line, delimiter) {
+                    const values = [];
+                    let current = '';
+                    let inQuotes = false;
 
-                // Convert to array of objects using standard headers
-                // Based on actual supplier data format from Carolina Made
-                for (let i = startLine; i < lines.length; i++) {
-                    const values = lines[i].split(delimiter);
+                    for (let i = 0; i < line.length; i++) {
+                        const char = line[i];
+                        const nextChar = line[i + 1];
+
+                        if (char === '"') {
+                            if (inQuotes && nextChar === '"') {
+                                // Escaped quote
+                                current += '"';
+                                i++;
+                            } else {
+                                // Toggle quote state
+                                inQuotes = !inQuotes;
+                            }
+                        } else if (char === delimiter && !inQuotes) {
+                            // End of field
+                            values.push(current);
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    values.push(current);
+                    return values.map(v => v.trim());
+                }
+
+                // Read headers from first line
+                const headers = parseCSVLine(lines[0], delimiter);
+
+                // Debug logging
+                console.log('Delimiter:', delimiter);
+                console.log('Headers found:', headers);
+                console.log('First data line:', lines[1]);
+                if (lines.length > 1) {
+                    const firstValues = parseCSVLine(lines[1], delimiter);
+                    console.log('First row values:', firstValues);
+                }
+
+                // Convert to array of objects using headers from file
+                for (let i = 1; i < lines.length; i++) {
+                    const values = parseCSVLine(lines[i], delimiter);
                     const row = {};
 
-                    // Map based on actual column positions from supplier CSV
-                    row['Item Number'] = values[0] ? values[0].trim() : '';           // IC47BATHYXS
-                    row['Style'] = values[1] ? values[1].trim() : '';                 // IC47B
-                    row['Mill'] = values[2] ? values[2].trim() : '';                  // 00001
-                    row['Color Code'] = values[3] ? values[3].trim() : '';            // ATH
-                    row['Size Code'] = values[4] ? values[4].trim() : '';             // YXS
-                    row['Pieces per Case'] = values[5] ? values[5].trim() : '';       // 072
-                    row['Manufacturer'] = values[6] ? values[6].trim() : '';          // (empty)
-                    row[''] = '';                                                      // BLANK column
-                    row['Case Wt.'] = values[7] ? values[7].trim() : '';              // 12.30
-                    row[' '] = '';                                                     // BLANK column
-                    row['Regular Piece Price'] = values[8] ? values[8].trim() : '';   // 3.46
-                    row['Regular Dozen Price'] = values[9] ? values[9].trim() : '';   // 2.96
-                    row['Regular Case Price'] = values[10] ? values[10].trim() : '';  // 2.79
-                    row['Currency'] = values[11] ? values[11].trim() : '';            // USD
-                    row['Retail A Pricing'] = values[12] ? values[12].trim() : '';    // 5.58
-                    row['Color Category'] = values[13] ? values[13].trim() : '';      // H
-                    row['Color Description'] = values[14] ? values[14].trim() : '';   // ATHLETIC HEATHER
-                    row['Closeout'] = '';                                              // Always empty
-                    row['Style Description'] = values[15] ? values[15].trim() : '';   // Fruit of the Loom Iconic Youth Short Sleeve T
-                    row['Shipping Warehouse'] = values[16] ? values[16].trim() : '';  // NC
-                    row['Piece Cube/Inches'] = values[17] ? values[17].trim() : '';   // 30.32
-                    row['Piece Weight'] = values[18] ? values[18].trim() : '';        // .1500
-                    row['Inventory Pieces'] = values[19] ? values[19].trim() : '';    // 0000036
-                    row['Customer Sale Piece Price'] = values[20] ? values[20].trim() : ''; // 0.00
-                    row['Customer Sale Dozen Price'] = values[21] ? values[21].trim() : ''; // 2.29
-                    row['Customer Sale Case Price'] = '';                              // Always empty
-                    row['Sale End Date'] = values[22] ? values[22].trim() : '';       // 07/25/25
-                    row['GTIN#'] = values[23] ? values[23].trim() : '';               // 00885306946654
-                    row['Mill Discontinued'] = values[24] ? values[24].trim() : '';   // D
-                    row['Web Color Description'] = '';                                 // Always empty
-                    row['Brand'] = values[25] ? values[25].trim() : '';               // Fruit of the Loom
+                    headers.forEach((header, index) => {
+                        row[header] = values[index] ? values[index] : '';
+                    });
 
                     rawData.push(row);
+                }
+
+                // Debug: check first row of rawData
+                if (rawData.length > 0) {
+                    console.log('First rawData row:', rawData[0]);
                 }
 
                 // Reset parsed state
                 isParsed = false;
                 parsedData = [];
 
-                // Display the raw result in a table with standard headers
-                displayResult(rawData, standardHeaders);
+                // Display the raw result in a table with headers from file
+                displayResult(rawData, headers);
 
                 // Hide loading, show buttons
                 loadingIndicator.style.display = 'none';
@@ -235,22 +215,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Transform to DecoNetwork format (similar to Uneek)
+        console.log('=== Starting DecoNetwork Transformation ===');
+        console.log('Raw data first row:', rawData[0]);
+        console.log('Raw data keys:', Object.keys(rawData[0]));
+
+        // Check what each field maps to
+        console.log('Style Description value:', rawData[0]['Style Description']);
+        console.log('Brand value:', rawData[0]['Brand']);
+        console.log('Color Code value:', rawData[0]['Color Code']);
+        console.log('Item Number value:', rawData[0]['Item Number']);
+
         parsedData = rawData.map(row => {
-            return {
+            const result = {
                 ProductName: row['Style Description'] || '',
                 ProductDescription: '',
-                BrandName: row['Brand'] || '',
+                Brand: row['Brand'] || '',
                 VendorProductCode: row['Style'] || '',
                 VendorSkuCode: row['Item Number'] || '',
-                ColorName: row['Color Description'] || '',
+                ColorName: row['Color Description'] || row['Color Code'] || '',
                 SizeCode: row['Size Code'] || '',
                 SizeName: row['Size Code'] || '',
                 PiecePrice: row['Regular Piece Price'] || '',
                 DozenPrice: row['Regular Dozen Price'] || '',
                 CasePrice: row['Regular Case Price'] || '',
-                CasePriceQTY: row['Pieces per Case'] || ''
+                CasePriceQTY: row['Pieces per Case'] || '',
+                ShippingWeight: row['Piece Weight'] || ''
             };
+            return result;
         });
+
+        console.log('Parsed data first row:', parsedData[0]);
 
         // Display parsed data
         isParsed = true;
