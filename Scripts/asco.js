@@ -114,6 +114,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Limit preview to first 100 rows to prevent browser freeze
+        const previewData = data.slice(0, 100);
+        const totalRows = data.length;
+
         const headers = Object.keys(data[0]);
         
         let tableHTML = '<table>';
@@ -127,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Table body
         tableHTML += '<tbody>';
-        data.forEach(row => {
+        previewData.forEach(row => {
             tableHTML += '<tr>';
             headers.forEach(header => {
                 tableHTML += `<td>${row[header] || ''}</td>`;
@@ -136,6 +140,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         tableHTML += '</tbody></table>';
         
+        if (totalRows > 100) {
+            tableHTML += `<p style="padding: 1rem; text-align: center; color: #666;">Showing first 100 of ${totalRows} rows. Download CSV to see all data.</p>`;
+        }
+
         output.innerHTML = tableHTML;
     }
 

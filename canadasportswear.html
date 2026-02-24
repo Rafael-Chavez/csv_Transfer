@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canada Sportswear Data Parser</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <h1>CANADA SPORTSWEAR DATA PARSER</h1>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">
+                        <span class="icon-circle"><i class="fas fa-home"></i></span>
+                        Home
+                    </a>
+                    <a href="mailto:rchavez@deconetwork.com" class="nav-link">
+                        <span class="icon-circle"><i class="fas fa-envelope"></i></span>
+                        Contact
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+<main>
+    <div class="container">
+        <section class="file-upload">
+            <label for="csv-file" class="file-upload-label">
+                <i class="fa fa-file-csv"></i>
+                <span>Click to select or drop CSV file here</span>
+            </label>
+            <input type="file" id="csv-file" accept=".csv" />
+            <div id="file-name" class="file-name"></div>
+            <button id="download-btn" class="btn" style="display:none;">Download CSV</button>
+        </section>
+
+        <!-- Search Container -->
+        <div id="search-container" style="display: none; margin: 20px 0; text-align: center;">
+            <input type="text" id="search-input" placeholder="Search by Product Name..." style="padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;">
+        </div>
+
+            <section class="data-table-container">
+                <div id="output" class="data-table">
+                    <div class="empty-state">
+                        <i class="fas fa-table"></i>
+                        <h3>No data to display</h3>
+                        <p>Upload a CSV file to see the data here</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="Scripts/canadasportswear.js"></script>
+</body>
+</html>

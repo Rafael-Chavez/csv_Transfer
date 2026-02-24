@@ -57,10 +57,19 @@
     function displayResult(data) {
         const outputDiv = document.getElementById('output');
         outputDiv.innerHTML = ''; // Clear previous content
-    
+
+        if (data.length === 0) {
+            outputDiv.innerHTML = '<div class="empty-state"><i class="fas fa-table"></i><h3>No data to display</h3><p>Upload an Excel file to see the data here</p></div>';
+            return;
+        }
+
+        // Limit preview to first 100 rows to prevent browser freeze
+        const previewData = data.slice(0, 100);
+        const totalRows = data.length;
+
         // Create a table
         const table = document.createElement('table');
-    
+
         // Create table header
         const headers = Object.keys(data[0]);
         const headerRow = document.createElement('tr');
@@ -70,9 +79,9 @@
             headerRow.appendChild(th);
         });
         table.appendChild(headerRow);
-    
+
         // Create table rows with cell values
-        data.forEach(row => {
+        previewData.forEach(row => {
             const tr = document.createElement('tr');
             headers.forEach(header => {
                 const td = document.createElement('td');
@@ -81,8 +90,17 @@
             });
             table.appendChild(tr);
         });
-    
+
         outputDiv.appendChild(table);
+
+        if (totalRows > 100) {
+            const message = document.createElement('p');
+            message.style.padding = '1rem';
+            message.style.textAlign = 'center';
+            message.style.color = '#666';
+            message.textContent = `Showing first 100 of ${totalRows} rows. Download CSV to see all data.`;
+            outputDiv.appendChild(message);
+        }
     }
     
     // Function to download the parsed data as a CSV file
