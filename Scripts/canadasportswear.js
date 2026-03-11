@@ -259,23 +259,22 @@ document.getElementById('download-btn').addEventListener('click', function() {
     downloadCSV(csvContent);
 });
 
-// Function to convert JSON data to TSV format (tab-separated)
+// Function to convert JSON data to CSV format
 function convertToCSV(data) {
     const headers = Object.keys(data[0]);
     const csvRows = [];
 
     // Add header row
-    csvRows.push(headers.join('\t'));
+    csvRows.push(headers.join(','));
 
     // Add data rows
     data.forEach(row => {
         const values = headers.map(header => {
-            let value = row[header] || '';
-            // Replace problematic characters
-            value = value.replace(/\t/g, ' ').replace(/\n/g, ' ');
-            return value;
+            // Escape quotes and ensure proper CSV formatting
+            const value = row[header] === null || row[header] === undefined ? '' : String(row[header]);
+            return `"${value.replace(/"/g, '""')}"`;
         });
-        csvRows.push(values.join('\t'));
+        csvRows.push(values.join(','));
     });
 
     return csvRows.join('\n');
@@ -283,7 +282,7 @@ function convertToCSV(data) {
 
 // Function to create and download the file
 function downloadCSV(csvContent) {
-    const blob = new Blob([csvContent], { type: 'text/tab-separated-values' });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.setAttribute('href', url);

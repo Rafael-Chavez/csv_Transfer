@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#257bf4",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+    <title>Ricardo Chavez | Developer Portfolio</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+    <div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Navigation -->
+            <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 md:px-20 py-4">
+                <div class="flex items-center gap-4 text-primary">
+                    <div class="size-8 flex items-center justify-center bg-primary/10 rounded-lg">
+                        <span class="material-symbols-outlined text-primary">terminal</span>
+                    </div>
+                    <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Ricardo Chavez</h2>
+                </div>
+                <div class="flex flex-1 justify-end gap-8 items-center">
+                    <nav class="hidden md:flex items-center gap-8">
+                        <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Home</a>
+                        <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Projects</a>
+                        <a class="text-primary text-sm font-medium" href="#">About</a>
+                        <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Contact</a>
+                    </nav>
+                    <div class="flex gap-2">
+                        <button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-primary/20 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">code</span>
+                        </button>
+                        <button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-primary/20 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">share</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 max-w-4xl mx-auto w-full px-6 py-12">
+                <!-- Profile Section -->
+                <section class="flex flex-col items-center text-center mb-16">
+                    <div class="relative mb-6">
+                        <div class="absolute -inset-1 bg-gradient-to-tr from-primary to-blue-400 rounded-full blur opacity-25"></div>
+                        <div class="relative bg-center bg-no-repeat aspect-square bg-cover rounded-full h-40 w-40 border-4 border-background-light dark:border-background-dark shadow-xl flex items-center justify-center bg-gradient-to-br from-primary to-blue-600">
+                            <span class="text-white text-6xl font-bold">RC</span>
+                        </div>
+                    </div>
+                    <h1 class="text-slate-900 dark:text-white text-4xl font-bold tracking-tight mb-2">Ricardo Chavez</h1>
+                    <p class="text-primary text-lg font-medium mb-2">Full Stack Developer</p>
+                    <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-sm">location_on</span>
+                        <span class="text-sm">Available for opportunities</span>
+                    </div>
+                </section>
+
+                <!-- About Me Bio -->
+                <section class="mb-16">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="material-symbols-outlined text-primary">person</span>
+                        <h2 class="text-slate-900 dark:text-white text-2xl font-bold leading-tight">About Me</h2>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800/40 p-8 rounded-xl border border-slate-200 dark:border-slate-800">
+                        <p class="text-slate-700 dark:text-slate-300 text-lg leading-relaxed mb-6">
+                            Welcome to my portfolio. I'm a developer passionate about creating innovative solutions and building applications that make a difference.
+                        </p>
+                        <p class="text-slate-700 dark:text-slate-300 text-lg leading-relaxed">
+                            I enjoy tackling challenging problems and continuously learning new technologies. My goal is to deliver high-quality work that exceeds expectations and creates meaningful user experiences.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Technical Skills -->
+                <section class="mb-16">
+                    <div class="flex items-center gap-3 mb-8">
+                        <span class="material-symbols-outlined text-primary">terminal</span>
+                        <h3 class="text-slate-900 dark:text-white text-2xl font-bold leading-tight">Technical Skills</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Languages & Core -->
+                        <div class="space-y-4">
+                            <h4 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest px-1">Languages & Core</h4>
+                            <div class="flex flex-wrap gap-3">
+                                <div class="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-primary text-sm font-semibold">
+                                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                                    JavaScript (ES6+)
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-primary text-sm font-semibold">
+                                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                                    TypeScript
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-primary text-sm font-semibold">
+                                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                                    Python
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-lg text-primary text-sm font-semibold">
+                                    <span class="w-2 h-2 rounded-full bg-primary"></span>
+                                    SQL
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Frameworks & Tools -->
+                        <div class="space-y-4">
+                            <h4 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest px-1">Frameworks & Tools</h4>
+                            <div class="flex flex-wrap gap-3">
+                                <div class="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-sm font-semibold">
+                                    React.js
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-sm font-semibold">
+                                    Next.js
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-sm font-semibold">
+                                    Tailwind CSS
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-sm font-semibold">
+                                    Node.js
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-sm font-semibold">
+                                    Docker
+                                </div>
+                                <div class="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 text-sm font-semibold">
+                                    GraphQL
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer CTA -->
+                <section class="border-t border-slate-200 dark:border-slate-800 pt-12 text-center">
+                    <h3 class="text-xl font-bold mb-4">Interested in working together?</h3>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-lg shadow-primary/20">
+                            Download Resume
+                        </button>
+                        <button class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-white px-8 py-3 rounded-lg font-bold transition-all">
+                            Get in Touch
+                        </button>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Footer -->
+            <footer class="py-10 text-center border-t border-slate-200 dark:border-slate-800 mt-20">
+                <p class="text-slate-500 text-sm">© 2026 Ricardo Chavez. Built with passion and code.</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
