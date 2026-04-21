@@ -20,30 +20,56 @@ document.getElementById('search-input').addEventListener('input', function() {
 // Function to parse the uploaded CSV file
 function parseCSV(file) {
     const reader = new FileReader();
-    
+
     reader.onload = function(e) {
         const csv = e.target.result;
-        const lines = csv.split('\n');
-        
+        // Don't split by newlines - we need to parse properly handling quoted multi-line fields
+        const lines = parseCSVRows(csv);
+
         // Parse header - handle quoted fields
         const headers = parseCSVLine(lines[0]);
-        
+
+        // Log headers for debugging
+        console.log('Headers found:', headers);
+        console.log('Total headers:', headers.length);
+
         // Parse data rows
         parsedData = [];
         for (let i = 1; i < lines.length; i++) {
             if (lines[i].trim() === '') continue;
-            
+
             const row = parseCSVLine(lines[i]);
             if (row.length === 0) continue;
-            
-            // Get header indices
+
+            // Debug: Log row structure for problematic rows
+            if (i >= 12 && i <= 15) {
+                console.log(`Row ${i + 1}:`, row);
+                console.log(`Row ${i + 1} field count:`, row.length);
+            }
+
+            // Get header indices - case insensitive matching
             const getIndex = (header) => headers.findIndex(h => h.trim().toLowerCase() === header.toLowerCase());
-            
+
+            // Try multiple possible column name variations
+            const getIndexMultiple = (...possibleNames) => {
+                for (let name of possibleNames) {
+                    const idx = getIndex(name);
+                    if (idx !== -1) return idx;
+                }
+                return -1;
+            };
+
             const sku = row[getIndex('SKU')] || '';
             const upc = row[getIndex('UPC')] || '';
             const productName = row[getIndex('Title')] || '';
             const category = row[getIndex('Category')] || '';
-            
+
+            // Try to find price columns with multiple possible names
+            const piecePriceIdx = getIndexMultiple('Piece Price', 'Price', 'Unit Price');
+            const dozenPriceIdx = getIndexMultiple('Dozen Price', '12 Price');
+            const casePriceIdx = getIndexMultiple('Case Price', 'Cs Price');
+            const caseQtyIdx = getIndexMultiple('qty per case', 'Qty Per Case', 'Case Qty', 'Pieces Per Case');
+
             // Map the fields from Canada Sportswear format to desired output format
             const mappedRow = {
                 ProductName: productName,
@@ -64,11 +90,11 @@ function parseCSV(file) {
                 ViewSrc3: '',
                 ViewSrc4: '',
                 ProductViews: '',
-                PiecePrice: '',
-                DozenPrice: '',
-                CasePrice: '',
-                DozenPriceQty: '',
-                CasePriceQty: row[getIndex('qty per case')] || '',
+                PiecePrice: piecePriceIdx !== -1 ? row[piecePriceIdx] || '' : '',
+                DozenPrice: dozenPriceIdx !== -1 ? row[dozenPriceIdx] || '' : '',
+                CasePrice: casePriceIdx !== -1 ? row[casePriceIdx] || '' : '',
+                DozenPriceQty: '12',
+                CasePriceQty: caseQtyIdx !== -1 ? row[caseQtyIdx] || '' : '',
                 Category1: '',
                 Category2: '',
                 ShippingLength: row[getIndex('Case Length')] || '',
@@ -76,7 +102,7 @@ function parseCSV(file) {
                 ShippingHeight: row[getIndex('Case Height')] || '',
                 ShippingWeight: row[getIndex('Net Weight')] || ''
             };
-            
+
             parsedData.push(mappedRow);
         }
 
@@ -86,8 +112,54 @@ function parseCSV(file) {
         // Show download button after parsing data
         document.getElementById('download-btn').style.display = 'inline-block';
     };
-    
+
     reader.readAsText(file);
+}
+
+// Function to parse CSV into rows, handling multi-line quoted fields
+function parseCSVRows(csv) {
+    const rows = [];
+    let currentRow = '';
+    let insideQuotes = false;
+
+    for (let i = 0; i < csv.length; i++) {
+        const char = csv[i];
+        const nextChar = csv[i + 1];
+
+        if (char === '"') {
+            if (insideQuotes && nextChar === '"') {
+                currentRow += '"';
+                i++;
+            } else {
+                insideQuotes = !insideQuotes;
+            }
+            currentRow += '"';
+        } else if (char === '\n' && !insideQuotes) {
+            // End of row
+            if (currentRow.trim()) {
+                rows.push(currentRow);
+            }
+            currentRow = '';
+        } else if (char === '\r' && nextChar === '\n' && !insideQuotes) {
+            // Windows line ending - skip \r, let \n be handled next iteration
+            continue;
+        } else if (char === '\r' && !insideQuotes) {
+            // Mac line ending
+            if (currentRow.trim()) {
+                rows.push(currentRow);
+            }
+            currentRow = '';
+        } else {
+            currentRow += char;
+        }
+    }
+
+    // Push the last row if exists
+    if (currentRow.trim()) {
+        rows.push(currentRow);
+    }
+
+    return rows;
 }
 
 // Function to parse CSV line handling quoted fields
@@ -95,11 +167,11 @@ function parseCSVLine(line) {
     const result = [];
     let current = '';
     let insideQuotes = false;
-    
+
     for (let i = 0; i < line.length; i++) {
         const char = line[i];
         const nextChar = line[i + 1];
-        
+
         if (char === '"') {
             if (insideQuotes && nextChar === '"') {
                 current += '"';
@@ -108,14 +180,15 @@ function parseCSVLine(line) {
                 insideQuotes = !insideQuotes;
             }
         } else if (char === ',' && !insideQuotes) {
-            result.push(current.trim().replace(/"/g, ''));
+            result.push(current.trim());
             current = '';
         } else {
             current += char;
         }
     }
-    
-    result.push(current.trim().replace(/"/g, ''));
+
+    // Push the last field
+    result.push(current.trim());
     return result;
 }
 
