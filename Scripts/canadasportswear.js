@@ -97,9 +97,9 @@ function parseCSV(file) {
                 CasePriceQty: caseQtyIdx !== -1 ? row[caseQtyIdx] || '' : '',
                 Category1: '',
                 Category2: '',
-                ShippingLength: row[getIndex('Case Length')] || '',
-                ShippingWidth: row[getIndex('Case Width')] || '',
-                ShippingHeight: row[getIndex('Case Height')] || '',
+                ShippingLength: '',
+                ShippingWidth: '',
+                ShippingHeight: '',
                 ShippingWeight: row[getIndex('Net Weight')] || ''
             };
 
