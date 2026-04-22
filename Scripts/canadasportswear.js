@@ -61,31 +61,31 @@ function parseCSV(file) {
 
             const sku = row[getIndex('SKU')] || '';
             const upc = row[getIndex('UPC')] || '';
-            const productName = row[getIndex('Title')] || '';
-            const category = row[getIndex('Category')] || '';
+            const productName = row[getIndexMultiple('TitleEN', 'Title', 'Product Name')] || '';
+            const category = row[getIndexMultiple('CategoryEN', 'Category')] || '';
 
             // Try to find price columns with multiple possible names
-            const piecePriceIdx = getIndexMultiple('Piece Price', 'Price', 'Unit Price');
+            const piecePriceIdx = getIndexMultiple('LEVEL 1 PRICE', 'Piece Price', 'Price', 'Unit Price');
             const dozenPriceIdx = getIndexMultiple('Dozen Price', '12 Price');
             const casePriceIdx = getIndexMultiple('Case Price', 'Cs Price');
-            const caseQtyIdx = getIndexMultiple('qty per case', 'Qty Per Case', 'Case Qty', 'Pieces Per Case');
+            const caseQtyIdx = getIndexMultiple('# of pcs/case', 'qty per case', 'Qty Per Case', 'Case Qty', 'Pieces Per Case');
 
             // Map the fields from Canada Sportswear format to desired output format
             const mappedRow = {
                 ProductName: productName,
-                ProductDescription: row[getIndex('Description')] || '',
+                ProductDescription: row[getIndexMultiple('DescriptionEN', 'Description')] || '',
                 Brand: row[getIndex('Brand')] || 'CSW 24/7',
                 DNProductType: category,
                 VendorProductCode: extractProductCode(sku),
                 VendorSkuCode: upc,
-                ColorName: row[getIndex('Color')] || '',
-                SizeCode: row[getIndex('Size')] || '',
-                SizeName: row[getIndex('Size')] || '',
+                ColorName: row[getIndexMultiple('ColorEN', 'Color')] || '',
+                SizeCode: row[getIndexMultiple('SizeEN', 'Size')] || '',
+                SizeName: row[getIndexMultiple('SizeEN', 'Size')] || '',
                 ColorPaletteName: 'colors_HEX.csv',
                 SizeTable: determineSizeTable(productName),
                 SizeChartImage: 'size_chart_image.jpg',
                 LifestyleImage: '',
-                ViewSrc1: '',
+                ViewSrc1: row[getIndexMultiple('images link', 'Image Link', 'Image')] || '',
                 ViewSrc2: '',
                 ViewSrc3: '',
                 ViewSrc4: '',
