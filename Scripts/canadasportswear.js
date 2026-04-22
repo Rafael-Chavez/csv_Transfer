@@ -90,9 +90,9 @@ function parseCSV(file) {
                 ViewSrc3: '',
                 ViewSrc4: '',
                 ProductViews: '',
-                PiecePrice: piecePriceIdx !== -1 ? row[piecePriceIdx] || '' : '',
-                DozenPrice: dozenPriceIdx !== -1 ? row[dozenPriceIdx] || '' : '',
-                CasePrice: casePriceIdx !== -1 ? row[casePriceIdx] || '' : '',
+                PiecePrice: piecePriceIdx !== -1 ? cleanPrice(row[piecePriceIdx]) : '',
+                DozenPrice: dozenPriceIdx !== -1 ? cleanPrice(row[dozenPriceIdx]) : '',
+                CasePrice: casePriceIdx !== -1 ? cleanPrice(row[casePriceIdx]) : '',
                 DozenPriceQty: '12',
                 CasePriceQty: caseQtyIdx !== -1 ? row[caseQtyIdx] || '' : '',
                 Category1: '',
@@ -197,6 +197,13 @@ function extractProductCode(sku) {
     // Extract the base product code (format: F06006 from F06006-BLA-AS)
     const parts = sku.split('-');
     return parts[0] || sku;
+}
+
+// Function to clean price (remove $ and other currency symbols)
+function cleanPrice(price) {
+    if (!price) return '';
+    // Remove $, €, £, ¥ and any whitespace, keep only numbers and decimal point
+    return String(price).replace(/[\$€£¥,\s]/g, '').trim();
 }
 
 // Function to determine size table based on product name
