@@ -61,7 +61,7 @@ function parseCSV(file) {
 
             const sku = row[getIndex('SKU')] || '';
             const upc = row[getIndex('UPC')] || '';
-            const productName = row[getIndexMultiple('TitleEN', 'Title', 'Product Name')] || '';
+            const productName = row[getIndexMultiple('TitleEN', 'Title EN', 'Title', 'Product Name')] || '';
             const category = row[getIndexMultiple('CategoryEN', 'Category EN', 'Category')] || '';
 
             // Try to find price columns with multiple possible names
