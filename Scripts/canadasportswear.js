@@ -64,6 +64,12 @@ function parseCSV(file) {
             const productName = row[getIndexMultiple('TitleEN', 'Title EN', 'Title', 'Product Name')] || '';
             const category = row[getIndexMultiple('CategoryEN', 'Category EN', 'Category')] || '';
 
+            // Skip rows that contain the decoration break message
+            const rowText = row.join(' ').toLowerCase();
+            if (rowText.includes('we do not offer in-house decoration')) {
+                continue;
+            }
+
             // Try to find price columns with multiple possible names
             const piecePriceIdx = getIndexMultiple('LEVEL 1 PRICE', 'Piece Price', 'PiecePrice', 'Price', 'Unit Price');
             const dozenPriceIdx = getIndexMultiple('Dozen Price', 'DozenPrice', '12 Price');
