@@ -71,7 +71,7 @@ function parseCSV(file) {
             }
 
             // Try to find price columns with multiple possible names
-            const piecePriceIdx = getIndexMultiple('LEVEL 1 PRICE', 'Piece Price', 'PiecePrice', 'Price', 'Unit Price');
+            const piecePriceIdx = getIndexMultiple('LEVEL 1 NET', 'LEVEL 1 PRICE', 'Piece Price', 'PiecePrice', 'Price', 'Unit Price');
             const dozenPriceIdx = getIndexMultiple('Dozen Price', 'DozenPrice', '12 Price');
             const casePriceIdx = getIndexMultiple('Case Price', 'Cs Price');
             const caseQtyIdx = getIndexMultiple('# of pcs/case', 'qty per case', 'Qty Per Case', 'Case Qty', 'Pieces Per Case');
