@@ -35,11 +35,16 @@ function parseCSV(file) {
 
         // Parse data rows
         parsedData = [];
+        const skippedRows = [];
+        let totalRows = 0;
+
         for (let i = 1; i < lines.length; i++) {
             if (lines[i].trim() === '') continue;
 
             const row = parseCSVLine(lines[i]);
             if (row.length === 0) continue;
+
+            totalRows++;
 
             // Debug: Log row structure for problematic rows
             if (i >= 12 && i <= 15) {
@@ -64,9 +69,21 @@ function parseCSV(file) {
             const productName = row[getIndexMultiple('TitleEN', 'Title EN', 'Title', 'Product Name')] || '';
             const category = row[getIndexMultiple('CategoryEN', 'Category EN', 'Category')] || '';
 
-            // Skip rows that contain the decoration break message
-            const rowText = row.join(' ').toLowerCase();
-            if (rowText.includes('we do not offer in-house decoration')) {
+            // Skip rows with no SKU or product name (likely header breaks or empty rows)
+            if (!sku && !productName) {
+                // Check if this is the decoration message row
+                const rowText = row.join(' ').toLowerCase();
+                if (rowText.includes('we do not offer in-house decoration')) {
+                    skippedRows.push({ row: i + 1, sku: '', reason: 'Decoration separator message' });
+                } else {
+                    skippedRows.push({ row: i + 1, sku: '', reason: 'Missing SKU and Product Name' });
+                }
+                continue;
+            }
+
+            // Skip if the product name itself is the decoration message
+            if (productName.toLowerCase().includes('we do not offer in-house decoration')) {
+                skippedRows.push({ row: i + 1, sku: sku, reason: 'Decoration message in product name' });
                 continue;
             }
 
@@ -110,6 +127,17 @@ function parseCSV(file) {
             };
 
             parsedData.push(mappedRow);
+        }
+
+        // Log summary of parsing
+        console.log('=== PARSING SUMMARY ===');
+        console.log(`Total rows processed: ${totalRows}`);
+        console.log(`Rows converted: ${parsedData.length}`);
+        console.log(`Rows skipped: ${skippedRows.length}`);
+
+        if (skippedRows.length > 0) {
+            console.log('\n=== SKIPPED ROWS DETAILS ===');
+            console.table(skippedRows);
         }
 
         // Display the result in a table
