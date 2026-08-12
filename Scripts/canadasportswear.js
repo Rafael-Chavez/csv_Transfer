@@ -94,9 +94,13 @@ function parseCSV(file) {
             const caseQtyIdx = getIndexMultiple('# of pcs/case', 'qty per case', 'Qty Per Case', 'Case Qty', 'Pieces Per Case');
 
             // Map the fields from Canada Sportswear format to desired output format
+            const rawDescription = row[getIndexMultiple('DescriptionEN', 'Description EN', 'Description')] || '';
+            // Remove decoration message from description
+            const cleanDescription = rawDescription.replace(/We do not offer in-house decoration on this collection\./gi, '').trim();
+
             const mappedRow = {
                 ProductName: productName,
-                ProductDescription: row[getIndexMultiple('DescriptionEN', 'Description EN', 'Description')] || '',
+                ProductDescription: cleanDescription,
                 Brand: row[getIndex('Brand')] || 'CSW 24/7',
                 DNProductType: category,
                 VendorProductCode: extractProductCode(sku),
